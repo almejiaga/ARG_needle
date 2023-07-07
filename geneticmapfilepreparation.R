@@ -1,23 +1,25 @@
-#script modificado para funcionar en linux
+#loading packages first
+library(dplyr)
+#defining the paths for the bim files
 pathTobed <- "map/"
+#getting the name of the files
 bamFiles <- paste0(pathTobed, dir(pathTobed, "bim$"))
+#extracting only the names without extension nor full path
 nombres <- sapply(strsplit(dir(pathTobed, "bim$"), "[/\\.]"), function(x){x[length(x)-1]}) # sample identifiers
+#defining the path to the genetic map files in plink format
 pathTovcf <- "vcf/"
+#getting the name of the files
 vcfFiles <- paste0(pathTovcf, dir(pathTovcf, "GRCh38.map$"))
+#extracting only the names without extension nor full path
 nombresvcf <- sapply(strsplit(dir(pathTovcf, "GRCh38.map$"), "[/\\.]"), function(x){x[length(x)-1]}) # sample identifiers
+#defining the suffix of the output files
 identificacion <- "_corrected.map"
 txt <- "_excluded.txt"
-pathTotxt <- "INDELS/"
-txtfile <- paste0(pathTotxt, dir(pathTotxt, "txt$"))
-dels <- sapply(strsplit(dir(pathTotxt, "txt$"), "[/\\.]"), function(x){x[length(x)-1]}) # sample identifiers
 valor=1
 repeat
 {
   mybed <- read.table(bamFiles[valor], header = FALSE, sep= "")
   myvcf <- read.table(vcfFiles[valor], header = FALSE, sep= "")
-  #mydel <- read.table(txtfile[valor], header = FALSE , sep="")
-  
-  #write.table(finalmap2, "dataset_argneedle.map", sep="\t", row.names = FALSE, col.names = FALSE)
   elnombre <- paste(nombres[valor], identificacion, sep="")
   elnombre2 <- paste(pathTobed, elnombre, sep="")
   elnombre3 <- paste(nombres[valor], txt, sep="")
@@ -31,8 +33,7 @@ repeat
   duplicatedvalues <- subset(finalmap2,duplicated(y))
   finallistoexclude <- duplicatedvalues[, c("V1", "V4")]
   finallistoexclude$V1 <- paste0("chr", finallistoexclude$V1)
-  library(dplyr)
-  finalmap3 <- finalmap2 %>%  filter(!row_number() %in% rownames(finallistoexclude))
+    finalmap3 <- finalmap2 %>%  filter(!row_number() %in% rownames(finallistoexclude))
   finalmap3 <- finalmap3[order(finalmap3$V4),]
   write.table(finallistoexclude, elnombre3, sep="\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
   write.table(finalmap3, elnombre2, sep="\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
