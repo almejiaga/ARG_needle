@@ -16,7 +16,7 @@ for this section, we will use the .bim file created in the last step. the R scri
 We have to create a map folder that will store the .bim files for each chromosome
 
 ## 2.2) plink_maps folder
-We have to create a vcf folder that stores the genetic map files for each chromosome in plink format. This files can be found in different resources, such as: put the link here. 
+We have to create a plink_maps folder that stores the genetic map files for each chromosome in plink format. This files can be found in different resources, such as: put the link here. 
 
 ## 2.3) Generate a list of excluded variants from the analysis
 Now that we have our files in the respective folders, we just have to run the script in this way in linux:
